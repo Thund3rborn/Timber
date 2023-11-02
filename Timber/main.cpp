@@ -1,29 +1,60 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <assert.h>
 
 using namespace sf;
 using namespace std;
 
+
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+	// Create a video mode object
+	VideoMode vm(1920, 1080);
+	// Create and open a window for the game
+	RenderWindow window(vm, "Timber!!!", Style::Fullscreen);
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+	// Create a texture to hold a graphic on the GPU
+	Texture textureBackground;
+	// Load a graphic into the texture
+	if (!textureBackground.loadFromFile("data/background.png")) {
+		assert(false); // Assertion fails if the texture cannot be loaded
+		printf("Error: Failed to load texture!");
+	}
+	// Create a sprite
+	Sprite spriteBackground;
+	// Attach the texture to the sprite
+	spriteBackground.setTexture(textureBackground);
+	// Set the spriteBackground to cover the screen
+	spriteBackground.setPosition(0, 0);
 
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-
-    return 0;
+	while (window.isOpen())
+	{
+		/*
+		****************************************
+		Handle the players input
+		****************************************
+		*/
+		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		{
+			window.close();
+		}
+		/*
+		****************************************
+		Update the scene
+		****************************************
+		*/
+		/*
+		****************************************
+		Draw the scene
+		****************************************
+		*/
+		// Clear everything from the last frame
+		window.clear();
+		// Draw our game scene here
+		window.draw(spriteBackground);
+		// Show everything we just drew
+		window.display();
+	}
+	return 0;
 }
